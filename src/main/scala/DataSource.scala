@@ -4,33 +4,27 @@ type EventFieldsContext = EventField.type
 type OrderFieldContext = OrderField.type
 type FieldContext = EventFieldsContext|OrderFieldContext
 
-trait DataSource[T <: FieldContext] {
+sealed trait DataSource[T <: FieldContext] {
   def sql(): String
   def context(): T
 }
 
-sealed trait ContextualField {
-  def snake(): String
+sealed trait ContextualField
+
+enum EventField extends ContextualField {
+  case EventId extends EventField
+  case OrderId extends EventField
+  case StatusFrom extends EventField
+  case StatusTo extends EventField
 }
 
-enum EventField(val fld: String) extends ContextualField {
-  case EventId extends EventField("event_id")
-  case OrderId extends EventField("order_id")
-  case StatusFrom extends EventField("status_from")
-  case StatusTo extends EventField("status_to")
-
-  override def snake(): String = fld
+enum OrderField extends ContextualField {
+  case OrderId extends OrderField
+  case Status extends OrderField
 }
 
-enum OrderField(val fld: String) extends ContextualField {
-  case OrderId extends OrderField("order_id")
-  case Status extends OrderField("status")
-
-  override def snake(): String = fld
-}
-
-object OrdersSource extends DataSource[OrderField.type] {
-  override def context(): OrderField.type = OrderField
+object OrdersSource extends DataSource[OrderFieldContext] {
+  override def context(): OrderFieldContext = OrderField
   override def sql(): String =
     """
       |SELECT
@@ -40,8 +34,8 @@ object OrdersSource extends DataSource[OrderField.type] {
       |""".stripMargin
 }
 
-object EventsSource extends DataSource[EventField.type] {
-  override def context(): EventField.type = EventField
+object EventsSource extends DataSource[EventFieldsContext] {
+  override def context(): EventFieldsContext = EventField
   override def sql(): String =
     """
       |SELECT

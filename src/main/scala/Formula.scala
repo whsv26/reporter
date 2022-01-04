@@ -1,21 +1,22 @@
 package org.whsv26.reporter
 
-import MetricEnum.*
+import MetricName.*
 import org.whsv26.reporter.Aggregate.{count, sum, sumIf}
-import scala.language.implicitConversions
-import Conversions.given
+import ImplicitConversions.given
 
-type Scalar = Boolean|String|Int|Float
+type Values = Boolean|String|Int|Float|OrderStatus
 
-object Conversions {
+object ImplicitConversions {
   import Ast.*
-  given Conversion[MetricEnum, Metric] = Metric(_)
-  given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.snake())
+  given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.toString)
   given Conversion[String, Field] = Field(_) // TODO drop
-  given Conversion[Scalar, Value] = Value(_)
+  given Conversion[Values, Value] = Value(_)
+  given [M <: MetricName, C <: FieldContext, S <: DataSource[C]] (using source: S, CM: ContextualMetric[M, C]): Conversion[M, Formula] with {
+    override def apply(name: M): Formula = CM.formula(source.context())
+  }
 }
 
-enum MetricEnum {
+enum MetricName {
   case OrdersQty
   case OrdersInApprovedStatusQty
   case OrdersInApprovedStatusAvg
@@ -24,27 +25,13 @@ enum MetricEnum {
   case OrdersInCanceledStatusQty
   case OrdersInCanceledStatusAvg
 
-  def formula[C <: FieldContext, S <: DataSource[C]](src: S)(using CM: ContextualMetric[this.type, C]): Formula = {
-    CM.formula(src.context())
+  def formula[C <: FieldContext, S <: DataSource[C]](source: S)(using CM: ContextualMetric[this.type, C]): Formula = {
+    CM.formula(source.context())
   }
 }
 
-trait ContextualMetric[M <: MetricEnum, C <: FieldContext] {
+trait ContextualMetric[M <: MetricName, C <: FieldContext] {
   def formula(ctx: C): Formula
-}
-
-object MetricImplementations {
-  given ContextualMetric[OrdersQty.type, OrderFieldContext] with {
-    def formula(ctx: OrderFieldContext): Formula = {
-      count(ctx.OrderId.toString)
-    }
-  }
-
-  given ContextualMetric[OrdersQty.type, EventFieldsContext] with {
-    def formula(ctx: EventFieldsContext): Formula = {
-      count(ctx.OrderId.toString)
-    }
-  }
 }
 
 sealed trait Formula {
@@ -62,6 +49,9 @@ object Aggregate {
   import Ast.*
   def sum(fld: Field): Formula = Sum(fld)
   def count(fld: Field): Formula = Count(fld)
+  def countIf(fld: Field, p: Predicate): Formula = CountIf(fld, p)
+  def countDistinct(fld: Field): Formula = CountDistinct(fld)
+  def countDistinctIf(fld: Field, p: Predicate): Formula = CountDistinctIf(fld, p)
   def sumIf(fld: Field, p: Predicate): Formula = SumIf(fld, p)
 }
 
@@ -80,6 +70,9 @@ object Ast {
   object Aggregate {
     case class Sum(fld: Field) extends Aggregate
     case class Count(fld: Field) extends Aggregate
+    case class CountIf(fld: Field, p: Predicate) extends Aggregate
+    case class CountDistinct(fld: Field) extends Aggregate
+    case class CountDistinctIf(fld: Field, p: Predicate) extends Aggregate
     case class SumIf(fld: Field, p: Predicate) extends Aggregate
   }
 
@@ -88,19 +81,10 @@ object Ast {
     case class In(lhs: Field, rhs: Seq[Value]) extends Predicate
   }
 
-  case class Metric(m: MetricEnum) extends Formula
-  case class Value(v: Scalar) extends Formula
+  case class Value(v: Values) extends Formula
   case class Field(fld: String) extends Formula {
     def ===(rhs: Value): Predicate = Eq(this, rhs)
     def in(rhs: Seq[Value]): Predicate = In(this, rhs)
   }
 }
 
-object TestFormulas {
-  def test1: Formula = {
-    OrdersInApprovedStatusQty * 100 / OrdersQty
-  }
-  def test2: Formula = {
-    OrdersInApprovedStatusQty % OrdersQty
-  }
-}

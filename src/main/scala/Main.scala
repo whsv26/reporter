@@ -1,13 +1,13 @@
 package org.whsv26.reporter
 
 import cats.effect.{ExitCode, IO, IOApp}
-import MetricImplementations.given
+import metrics.given
 
 object Main extends IOApp {
   def run(args: List[String]): IO[ExitCode] = {
     val formula = if Math.random() > 0.5
-      then MetricEnum.OrdersQty.formula(OrdersSource)
-      else MetricEnum.OrdersQty.formula(EventsSource)
+      then MetricName.OrdersQty.formula(OrdersSource)
+      else MetricName.OrdersQty.formula(EventsSource)
 
     for {
       _ <- IO.println(formula)
