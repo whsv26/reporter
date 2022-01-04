@@ -24,8 +24,8 @@ enum MetricEnum {
   case OrdersInCanceledStatusQty
   case OrdersInCanceledStatusAvg
 
-  def formula[C <: FieldContext](src: C)(using CM: ContextualMetric[this.type, C]): Formula = {
-    CM.formula(src)
+  def formula[C <: FieldContext, S <: DataSource[C]](src: S)(using CM: ContextualMetric[this.type, C]): Formula = {
+    CM.formula(src.context())
   }
 }
 
@@ -40,8 +40,8 @@ object MetricImplementations {
     }
   }
 
-  given ContextualMetric[OrdersQty.type, EventFieldContext] with {
-    def formula(ctx: EventFieldContext): Formula = {
+  given ContextualMetric[OrdersQty.type, EventFieldsContext] with {
+    def formula(ctx: EventFieldsContext): Formula = {
       count(ctx.OrderId.toString)
     }
   }

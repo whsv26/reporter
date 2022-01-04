@@ -1,8 +1,8 @@
 package org.whsv26.reporter
 
-type EventFieldContext = EventField.type
+type EventFieldsContext = EventField.type
 type OrderFieldContext = OrderField.type
-type FieldContext = EventFieldContext|OrderFieldContext
+type FieldContext = EventFieldsContext|OrderFieldContext
 
 trait DataSource[T <: FieldContext] {
   def sql(): String
@@ -30,7 +30,7 @@ enum OrderField(val fld: String) extends ContextualField {
 }
 
 object OrdersSource extends DataSource[OrderField.type] {
-  override def context(): OrderFieldContext = OrderField
+  override def context(): OrderField.type = OrderField
   override def sql(): String =
     """
       |SELECT
@@ -41,7 +41,7 @@ object OrdersSource extends DataSource[OrderField.type] {
 }
 
 object EventsSource extends DataSource[EventField.type] {
-  override def context(): EventFieldContext = EventField
+  override def context(): EventField.type = EventField
   override def sql(): String =
     """
       |SELECT
