@@ -10,7 +10,8 @@ type Scalar = Boolean|String|Int|Float
 object Conversions {
   import Ast.*
   given Conversion[MetricEnum, Metric] = Metric(_)
-  given Conversion[String, Field] = Field(_)
+  given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.snake())
+  given Conversion[String, Field] = Field(_) // TODO drop
   given Conversion[Scalar, Value] = Value(_)
 }
 
@@ -59,9 +60,9 @@ sealed trait Predicate extends Formula
 sealed trait Aggregate extends Formula
 object Aggregate {
   import Ast.*
-  def sum(t: Field): Formula = Sum(t)
-  def count(t: Field): Formula = Count(t)
-  def sumIf(t: Field, p: Predicate): Formula = SumIf(t, p)
+  def sum(fld: Field): Formula = Sum(fld)
+  def count(fld: Field): Formula = Count(fld)
+  def sumIf(fld: Field, p: Predicate): Formula = SumIf(fld, p)
 }
 
 object Ast {

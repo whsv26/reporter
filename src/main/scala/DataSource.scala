@@ -9,16 +9,24 @@ trait DataSource[T <: FieldContext] {
   def context(): T
 }
 
-enum EventField {
-  case EventId
-  case OrderId
-  case StatusFrom
-  case StatusTo
+sealed trait ContextualField {
+  def snake(): String
 }
 
-enum OrderField {
-  case OrderId
-  case Status
+enum EventField(val fld: String) extends ContextualField {
+  case EventId extends EventField("event_id")
+  case OrderId extends EventField("order_id")
+  case StatusFrom extends EventField("status_from")
+  case StatusTo extends EventField("status_to")
+
+  override def snake(): String = fld
+}
+
+enum OrderField(val fld: String) extends ContextualField {
+  case OrderId extends OrderField("order_id")
+  case Status extends OrderField("status")
+
+  override def snake(): String = fld
 }
 
 object OrdersSource extends DataSource[OrderField.type] {

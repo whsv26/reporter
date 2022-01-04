@@ -11,11 +11,18 @@ import Conversions.given
 object F {
   def _sum: Formula = sum("order_id")
   def _sumIf: Formula = sumIf("order_id", "order_id" === 1)
+  def _sumIfWithOrderField: Formula = sumIf(OrderField.OrderId, OrderField.OrderId === 1)
+  def _sumIfWithEventField: Formula = sumIf(EventField.EventId, EventField.OrderId === 1)
 }
 
 class CompilerTest extends AnyFlatSpec with should.Matchers {
   "Compiler" should "produce correct output" in {
     Compiler.compile(F._sum) should be ("sum(order_id)")
     Compiler.compile(F._sumIf) should be ("sumIf(order_id, order_id = 1)")
+  }
+
+  "Compiler" should "convert contextual field to snake case" in {
+    Compiler.compile(F._sumIfWithOrderField) should be ("sumIf(order_id, order_id = 1)")
+    Compiler.compile(F._sumIfWithEventField) should be ("sumIf(event_id, order_id = 1)")
   }
 }
