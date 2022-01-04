@@ -1,7 +1,7 @@
 package org.whsv26.reporter
 
 import MetricEnum.*
-import org.whsv26.reporter.Aggregate.{sum, sumIf}
+import org.whsv26.reporter.Aggregate.{count, sum, sumIf}
 import scala.language.implicitConversions
 import Conversions.given
 
@@ -22,6 +22,28 @@ enum MetricEnum {
   case OrdersInSpamStatusAvg
   case OrdersInCanceledStatusQty
   case OrdersInCanceledStatusAvg
+
+  def formula[C <: FieldContext](src: C)(using CM: ContextualMetric[this.type, C]): Formula = {
+    CM.formula(src)
+  }
+}
+
+trait ContextualMetric[M <: MetricEnum, C <: FieldContext] {
+  def formula(ctx: C): Formula
+}
+
+object MetricImplementations {
+  given ContextualMetric[OrdersQty.type, OrderFieldContext] with {
+    def formula(ctx: OrderFieldContext): Formula = {
+      count(ctx.OrderId.toString)
+    }
+  }
+
+  given ContextualMetric[OrdersQty.type, EventFieldContext] with {
+    def formula(ctx: EventFieldContext): Formula = {
+      count(ctx.OrderId.toString)
+    }
+  }
 }
 
 sealed trait Formula {
@@ -38,6 +60,7 @@ sealed trait Aggregate extends Formula
 object Aggregate {
   import Ast.*
   def sum(t: Field): Formula = Sum(t)
+  def count(t: Field): Formula = Count(t)
   def sumIf(t: Field, p: Predicate): Formula = SumIf(t, p)
 }
 
@@ -55,6 +78,7 @@ object Ast {
 
   object Aggregate {
     case class Sum(fld: Field) extends Aggregate
+    case class Count(fld: Field) extends Aggregate
     case class SumIf(fld: Field, p: Predicate) extends Aggregate
   }
 

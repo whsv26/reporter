@@ -1,10 +1,28 @@
 package org.whsv26.reporter
 
-trait DataSource {
+type EventFieldContext = EventField.type
+type OrderFieldContext = OrderField.type
+type FieldContext = EventFieldContext|OrderFieldContext
+
+trait DataSource[T <: FieldContext] {
   def sql(): String
+  def context(): T
 }
 
-object OrdersSource extends DataSource {
+enum EventField {
+  case EventId
+  case OrderId
+  case StatusFrom
+  case StatusTo
+}
+
+enum OrderField {
+  case OrderId
+  case Status
+}
+
+object OrdersSource extends DataSource[OrderField.type] {
+  override def context(): OrderFieldContext = OrderField
   override def sql(): String =
     """
       |SELECT
@@ -14,7 +32,8 @@ object OrdersSource extends DataSource {
       |""".stripMargin
 }
 
-object EventsSource extends DataSource {
+object EventsSource extends DataSource[EventField.type] {
+  override def context(): EventFieldContext = EventField
   override def sql(): String =
     """
       |SELECT
@@ -24,4 +43,5 @@ object EventsSource extends DataSource {
       |    e.status_to
       |FROM events e
       |""".stripMargin
+
 }
