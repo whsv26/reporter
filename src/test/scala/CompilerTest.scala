@@ -12,10 +12,10 @@ import metrics.given
 
 object F {
   def _sum: Formula = {
-    sum("order_id")
+    sum(OrderField.OrderId)
   }
   def _sumIf: Formula = {
-    sumIf("order_id", "order_id" === 1)
+    sumIf(OrderField.OrderId, OrderField.OrderId === 1)
   }
   def _sumIfWithOrderField: Formula = {
     sumIf(OrderField.OrderId, OrderField.OrderId === 1)

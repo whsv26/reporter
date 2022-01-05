@@ -8,7 +8,6 @@ type Values = Boolean|String|Int|Float|OrderStatus
 object ImplicitConversions {
   import Ast.*
   given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.toString)
-  given Conversion[String, Field] = Field(_) // TODO drop
   given Conversion[Values, Value] = Value(_)
   given [M <: MetricName, S <: DataSource](using src: S, cm: ContextualMetric[M, S]): Conversion[M, Formula] with {
     override def apply(name: M): Formula = cm.formula
