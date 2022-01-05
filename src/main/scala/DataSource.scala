@@ -1,9 +1,5 @@
 package org.whsv26.reporter
 
-type EventFieldsContext = EventField.type
-type OrderFieldContext = OrderField.type
-type FieldContext = EventFieldsContext|OrderFieldContext
-
 sealed trait ContextualField
 trait ContextualMetric[M <: MetricName, S <: DataSource] {
   type ContextType
