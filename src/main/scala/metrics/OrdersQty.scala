@@ -8,12 +8,12 @@ import scala.language.implicitConversions
 
 given OrderSourceMetric[OrdersQty.type] with {
   def formula: Formula = {
-    count(field.OrderId)
+    count(ctx.OrderId)
   }
 }
 
 given EventSourceMetric[OrdersQty.type] with {
   def formula: Formula = {
-    countDistinct(field.OrderId)
+    countDistinct(ctx.OrderId)
   }
 }

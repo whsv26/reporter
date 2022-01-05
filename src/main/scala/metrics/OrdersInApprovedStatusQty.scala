@@ -9,12 +9,12 @@ import OrderStatus.*
 
 given OrderSourceMetric[OrdersInApprovedStatusQty.type] with {
   def formula: Formula = {
-    countIf(field.OrderId, field.Status === Approved)
+    countIf(ctx.OrderId, ctx.Status === Approved)
   }
 }
 
 given EventSourceMetric[OrdersInApprovedStatusQty.type] with {
   def formula: Formula = {
-    countDistinctIf(field.OrderId, field.StatusTo === Approved)
+    countDistinctIf(ctx.OrderId, ctx.StatusTo === Approved)
   }
 }

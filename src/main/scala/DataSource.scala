@@ -11,15 +11,17 @@ sealed trait DataSource[T <: FieldContext] {
 
 sealed trait ContextualField
 trait ContextualMetric[M <: MetricName, C <: FieldContext] {
-  def field: C
+  def ctx: C
   def formula: Formula
 }
 
 trait OrderSourceMetric[M <: MetricName] extends ContextualMetric[M, OrderFieldContext] {
-  def field: OrderFieldContext = OrderField
+  given DataSource[OrderField.type] = OrderSource
+  def ctx: OrderFieldContext = OrderField
 }
 trait EventSourceMetric[M <: MetricName] extends ContextualMetric[M, EventFieldsContext] {
-  def field: EventFieldsContext = EventField
+  given DataSource[EventField.type] = EventSource
+  def ctx: EventFieldsContext = EventField
 }
 
 enum EventField extends ContextualField {

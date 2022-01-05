@@ -8,14 +8,12 @@ import OrderStatus.*
 import scala.language.implicitConversions
 
 given OrderSourceMetric[OrdersInApprovedStatusAvg.type] with {
-  given DataSource[OrderField.type] = OrderSource
   def formula: Formula = {
     OrdersInApprovedStatusQty * 100 / OrdersQty
   }
 }
 
 given EventSourceMetric[OrdersInApprovedStatusAvg.type] with {
-  given DataSource[EventField.type] = EventSource
   def formula: Formula = {
     OrdersInApprovedStatusQty * 100 / OrdersQty
   }
