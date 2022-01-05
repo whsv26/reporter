@@ -10,20 +10,31 @@ sealed trait DataSource[T <: FieldContext] {
 }
 
 sealed trait ContextualField
+trait ContextualMetric[M <: MetricName, C <: FieldContext] {
+  def field: C
+  def formula: Formula
+}
+
+trait OrderSourceMetric[M <: MetricName] extends ContextualMetric[M, OrderFieldContext] {
+  def field: OrderFieldContext = OrderField
+}
+trait EventSourceMetric[M <: MetricName] extends ContextualMetric[M, EventFieldsContext] {
+  def field: EventFieldsContext = EventField
+}
 
 enum EventField extends ContextualField {
-  case EventId extends EventField
-  case OrderId extends EventField
-  case StatusFrom extends EventField
-  case StatusTo extends EventField
+  case EventId
+  case OrderId
+  case StatusFrom
+  case StatusTo
 }
 
 enum OrderField extends ContextualField {
-  case OrderId extends OrderField
-  case Status extends OrderField
+  case OrderId
+  case Status
 }
 
-object OrdersSource extends DataSource[OrderFieldContext] {
+object OrderSource extends DataSource[OrderFieldContext] {
   override def context(): OrderFieldContext = OrderField
   override def sql(): String =
     """
@@ -34,7 +45,7 @@ object OrdersSource extends DataSource[OrderFieldContext] {
       |""".stripMargin
 }
 
-object EventsSource extends DataSource[EventFieldsContext] {
+object EventSource extends DataSource[EventFieldsContext] {
   override def context(): EventFieldsContext = EventField
   override def sql(): String =
     """

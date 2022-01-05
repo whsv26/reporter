@@ -11,27 +11,9 @@ object ImplicitConversions {
   given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.toString)
   given Conversion[String, Field] = Field(_) // TODO drop
   given Conversion[Values, Value] = Value(_)
-  given [M <: MetricName, C <: FieldContext, S <: DataSource[C]] (using source: S, CM: ContextualMetric[M, C]): Conversion[M, Formula] with {
-    override def apply(name: M): Formula = CM.formula(source.context())
+  given [M <: MetricName, C <: FieldContext, S <: DataSource[C]] (using source: S, cm: ContextualMetric[M, C]): Conversion[M, Formula] with {
+    override def apply(name: M): Formula = cm.formula
   }
-}
-
-enum MetricName {
-  case OrdersQty
-  case OrdersInApprovedStatusQty
-  case OrdersInApprovedStatusAvg
-  case OrdersInSpamStatusQty
-  case OrdersInSpamStatusAvg
-  case OrdersInCanceledStatusQty
-  case OrdersInCanceledStatusAvg
-
-  def formula[C <: FieldContext, S <: DataSource[C]](source: S)(using CM: ContextualMetric[this.type, C]): Formula = {
-    CM.formula(source.context())
-  }
-}
-
-trait ContextualMetric[M <: MetricName, C <: FieldContext] {
-  def formula(ctx: C): Formula
 }
 
 sealed trait Formula {

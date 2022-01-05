@@ -7,14 +7,14 @@ import ImplicitConversions.given
 import scala.language.implicitConversions
 import OrderStatus.*
 
-given ContextualMetric[OrdersInApprovedStatusQty.type, OrderField.type] with {
-  def formula(c: OrderField.type): Formula = {
-    countIf(c.OrderId, c.Status === Approved)
+given OrderSourceMetric[OrdersInApprovedStatusQty.type] with {
+  def formula: Formula = {
+    countIf(field.OrderId, field.Status === Approved)
   }
 }
 
-given ContextualMetric[OrdersInApprovedStatusQty.type, EventField.type] with {
-  def formula(c: EventField.type): Formula = {
-    countDistinctIf(c.OrderId, c.StatusTo === Approved)
+given EventSourceMetric[OrdersInApprovedStatusQty.type] with {
+  def formula: Formula = {
+    countDistinctIf(field.OrderId, field.StatusTo === Approved)
   }
 }

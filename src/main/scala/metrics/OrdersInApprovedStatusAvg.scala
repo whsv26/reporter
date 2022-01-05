@@ -7,16 +7,16 @@ import MetricName.*
 import OrderStatus.*
 import scala.language.implicitConversions
 
-given ContextualMetric[OrdersInApprovedStatusAvg.type, OrderField.type] with {
-  given DataSource[OrderField.type] = OrdersSource
-  def formula(c: OrderField.type): Formula = {
+given OrderSourceMetric[OrdersInApprovedStatusAvg.type] with {
+  given DataSource[OrderField.type] = OrderSource
+  def formula: Formula = {
     OrdersInApprovedStatusQty * 100 / OrdersQty
   }
 }
 
-given ContextualMetric[OrdersInApprovedStatusAvg.type, EventField.type] with {
-  given DataSource[EventField.type] = EventsSource
-  def formula(c: EventField.type): Formula = {
+given EventSourceMetric[OrdersInApprovedStatusAvg.type] with {
+  given DataSource[EventField.type] = EventSource
+  def formula: Formula = {
     OrdersInApprovedStatusQty * 100 / OrdersQty
   }
 }

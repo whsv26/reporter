@@ -24,7 +24,7 @@ object F {
     sumIf(EventField.EventId, EventField.OrderId === 1)
   }
   def _dependent: Formula = {
-    OrdersInApprovedStatusAvg.formula(OrdersSource)
+    OrdersInApprovedStatusAvg.formula(OrderSource)
   }
 }
 
