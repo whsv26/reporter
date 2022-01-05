@@ -23,9 +23,6 @@ object F {
   def _sumIfWithEventField: Formula = {
     sumIf(EventField.EventId, EventField.OrderId === 1)
   }
-  def _dependent: Formula = {
-    OrdersInApprovedStatusAvg.formula(OrderSource)
-  }
 }
 
 class CompilerTest extends AnyFlatSpec with should.Matchers {
@@ -40,6 +37,11 @@ class CompilerTest extends AnyFlatSpec with should.Matchers {
   }
 
   "Compiler" should "handle dependent metrics" in {
-    Compiler.compile(F._dependent) should be ("((countIf(order_id, status = 'APPROVED')) * (100)) / (count(order_id))")
+    Compiler.compile(OrdersInApprovedStatusPercent.formula(OrderSource)) should be {
+      "100 * countIf(order_id, status = 'APPROVED') / count(order_id)"
+    }
+    Compiler.compile(OrdersInApprovedStatusPercent.formula(EventSource)) should be {
+      "countDistinctIf(order_id, status_to = 'APPROVED') * 100 / countDistinct(order_id)"
+    }
   }
 }

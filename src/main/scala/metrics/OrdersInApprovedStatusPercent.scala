@@ -7,13 +7,13 @@ import MetricName.*
 import OrderStatus.*
 import scala.language.implicitConversions
 
-given OrderSourceMetric[OrdersInApprovedStatusAvg.type] with {
+given OrderSourceMetric[OrdersInApprovedStatusPercent.type] with {
   def formula: Formula = {
-    OrdersInApprovedStatusQty * 100 / OrdersQty
+    OrdersInApprovedStatusQty % OrdersQty
   }
 }
 
-given EventSourceMetric[OrdersInApprovedStatusAvg.type] with {
+given EventSourceMetric[OrdersInApprovedStatusPercent.type] with {
   def formula: Formula = {
     OrdersInApprovedStatusQty * 100 / OrdersQty
   }

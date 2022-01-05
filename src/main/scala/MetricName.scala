@@ -3,7 +3,7 @@ package org.whsv26.reporter
 enum MetricName {
   case OrdersQty
   case OrdersInApprovedStatusQty
-  case OrdersInApprovedStatusAvg
+  case OrdersInApprovedStatusPercent
   case OrdersInSpamStatusQty
   case OrdersInSpamStatusAvg
   case OrdersInCanceledStatusQty

@@ -18,13 +18,13 @@ object Compiler {
       case CountDistinctIf(fld, p) => "countDistinctIf(%s, %s)" format(compile(fld), compile(p))
       case CountIf(fld, p) => "countIf(%s, %s)" format(compile(fld), compile(p))
       case SumIf(fld, p) => "sumIf(%s, %s)" format(compile(fld), compile(p))
-      case Plus(lhs, rhs) => "(%s) + (%s)" format(compile(lhs), compile(rhs))
-      case Minus(lhs, rhs) => "(%s) - (%s)" format(compile(lhs), compile(rhs))
-      case Mul(lhs, rhs) => "(%s) * (%s)" format(compile(lhs), compile(rhs))
-      case Div(lhs, rhs) => "(%s) / (%s)" format(compile(lhs), compile(rhs))
+      case Plus(lhs, rhs) => "%s + %s" format(compile(lhs), compile(rhs))
+      case Minus(lhs, rhs) => "%s - %s" format(compile(lhs), compile(rhs))
+      case Mul(lhs, rhs) => "%s * %s" format(compile(lhs), compile(rhs))
+      case Div(lhs, rhs) => "%s / %s" format(compile(lhs), compile(rhs))
       case Field(fld) => fld.toSnakeCase
       case Value(v) => v match {
-        case s: OrderStatus => s"'${s.toString.toScreamingSnakeCase}'"
+        case status: OrderStatus => s"'${status.toString.toScreamingSnakeCase}'"
         case str: String => s"'$str'"
         case default => default.toString
       }
