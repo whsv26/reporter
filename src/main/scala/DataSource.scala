@@ -47,6 +47,9 @@ class OrderSource extends DataSource {
       |FROM orders o
       |""".stripMargin
 }
+object OrderSource {
+  def apply(): OrderSource = new OrderSource()
+}
 
 class EventSource extends DataSource {
   override def sql: String =
@@ -59,4 +62,7 @@ class EventSource extends DataSource {
       |FROM events e
       |""".stripMargin
 
+}
+object EventSource {
+  def apply(): EventSource = new EventSource()
 }

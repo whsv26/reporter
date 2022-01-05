@@ -5,10 +5,7 @@ enum MetricName {
   case OrdersInApprovedStatusQty
   case OrdersInApprovedStatusPercent
   case OrdersInSpamStatusQty
-  case OrdersInSpamStatusAvg
+  case OrdersInSpamStatusPercent
   case OrdersInCanceledStatusQty
-  case OrdersInCanceledStatusAvg
-  def formula[S <: DataSource](using cm: ContextualMetric[this.type, S]): Formula = {
-    cm.formula
-  }
+  case OrdersInCanceledStatusPercent
 }
