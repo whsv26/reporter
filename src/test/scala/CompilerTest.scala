@@ -37,10 +37,10 @@ class CompilerTest extends AnyFlatSpec with should.Matchers {
   }
 
   "Compiler" should "handle dependent metrics" in {
-    Compiler.compile(OrdersInApprovedStatusPercent.formula(OrderSource)) should be {
+    Compiler.compile(OrdersInApprovedStatusPercent.formula[OrderSource]) should be {
       "100 * countIf(order_id, status = 'APPROVED') / count(order_id)"
     }
-    Compiler.compile(OrdersInApprovedStatusPercent.formula(EventSource)) should be {
+    Compiler.compile(OrdersInApprovedStatusPercent.formula[EventSource]) should be {
       "countDistinctIf(order_id, status_to = 'APPROVED') * 100 / countDistinct(order_id)"
     }
   }

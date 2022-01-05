@@ -1,7 +1,6 @@
 package org.whsv26.reporter
 
 import MetricName.*
-import org.whsv26.reporter.Aggregate.{count, sum, sumIf}
 import ImplicitConversions.given
 
 type Values = Boolean|String|Int|Float|OrderStatus
@@ -11,7 +10,7 @@ object ImplicitConversions {
   given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.toString)
   given Conversion[String, Field] = Field(_) // TODO drop
   given Conversion[Values, Value] = Value(_)
-  given [M <: MetricName, C <: FieldContext, S <: DataSource[C]] (using source: S, cm: ContextualMetric[M, C]): Conversion[M, Formula] with {
+  given [M <: MetricName, S <: DataSource](using src: S, cm: ContextualMetric[M, S]): Conversion[M, Formula] with {
     override def apply(name: M): Formula = cm.formula
   }
 }

@@ -2,9 +2,9 @@ package org.whsv26.reporter
 package metrics
 
 import Aggregate.*
-import ImplicitConversions.given
 import MetricName.*
 import OrderStatus.*
+import ImplicitConversions.given
 import scala.language.implicitConversions
 
 given OrderSourceMetric[OrdersInApprovedStatusPercent.type] with {

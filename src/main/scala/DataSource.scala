@@ -4,24 +4,22 @@ type EventFieldsContext = EventField.type
 type OrderFieldContext = OrderField.type
 type FieldContext = EventFieldsContext|OrderFieldContext
 
-sealed trait DataSource[T <: FieldContext] {
-  def sql(): String
-  def context(): T
-}
-
 sealed trait ContextualField
-trait ContextualMetric[M <: MetricName, C <: FieldContext] {
-  def ctx: C
+trait ContextualMetric[M <: MetricName, S <: DataSource] {
+  type ContextType
+  def ctx: ContextType
   def formula: Formula
 }
 
-trait OrderSourceMetric[M <: MetricName] extends ContextualMetric[M, OrderFieldContext] {
-  given DataSource[OrderField.type] = OrderSource
-  def ctx: OrderFieldContext = OrderField
+trait OrderSourceMetric[M <: MetricName] extends ContextualMetric[M, OrderSource] {
+  type ContextType = OrderField.type
+  given OrderSource = new OrderSource
+  final override def ctx: ContextType = OrderField
 }
-trait EventSourceMetric[M <: MetricName] extends ContextualMetric[M, EventFieldsContext] {
-  given DataSource[EventField.type] = EventSource
-  def ctx: EventFieldsContext = EventField
+trait EventSourceMetric[M <: MetricName] extends ContextualMetric[M, EventSource] {
+  type ContextType = EventField.type
+  given EventSource = new EventSource
+  final override def ctx: ContextType = EventField
 }
 
 enum EventField extends ContextualField {
@@ -36,9 +34,12 @@ enum OrderField extends ContextualField {
   case Status
 }
 
-object OrderSource extends DataSource[OrderFieldContext] {
-  override def context(): OrderFieldContext = OrderField
-  override def sql(): String =
+sealed trait DataSource {
+  def sql: String
+}
+
+class OrderSource extends DataSource {
+  override def sql: String =
     """
       |SELECT
       |    o.order_id,
@@ -47,9 +48,8 @@ object OrderSource extends DataSource[OrderFieldContext] {
       |""".stripMargin
 }
 
-object EventSource extends DataSource[EventFieldsContext] {
-  override def context(): EventFieldsContext = EventField
-  override def sql(): String =
+class EventSource extends DataSource {
+  override def sql: String =
     """
       |SELECT
       |    e.event_id,
