@@ -1,6 +1,7 @@
 package org.whsv26.reporter
 
 sealed trait ContextualField
+
 trait ContextualMetric[M <: MetricName, S <: DataSource] {
   type ContextType
   def ctx: ContextType
@@ -12,6 +13,7 @@ trait OrderSourceMetric[M <: MetricName] extends ContextualMetric[M, OrderSource
   given OrderSource = new OrderSource
   final override def ctx: ContextType = OrderField
 }
+
 trait EventSourceMetric[M <: MetricName] extends ContextualMetric[M, EventSource] {
   type ContextType = EventField.type
   given EventSource = new EventSource
@@ -43,6 +45,7 @@ class OrderSource extends DataSource {
       |FROM orders o
       |""".stripMargin
 }
+
 object OrderSource {
   def apply(): OrderSource = new OrderSource()
 }
@@ -59,6 +62,7 @@ class EventSource extends DataSource {
       |""".stripMargin
 
 }
+
 object EventSource {
   def apply(): EventSource = new EventSource()
 }
