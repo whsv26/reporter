@@ -22,9 +22,10 @@ sealed trait Formula {
   def *(rhs: Formula): Formula = Mul(this, rhs)
   def /(rhs: Formula): Formula = Div(this, rhs)
 }
-sealed trait Predicate extends Formula
 
+sealed trait Predicate extends Formula
 sealed trait Aggregate extends Formula
+
 object Aggregate {
   import Ast.*
   def sum(fld: Field): Formula = Sum(fld)
