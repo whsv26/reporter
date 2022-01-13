@@ -5,10 +5,8 @@ import org.scalatest.*
 import flatspec.*
 import matchers.*
 import org.whsv26.reporter.Aggregate.*
-import org.whsv26.reporter.MetricName.*
 import scala.language.implicitConversions
 import ImplicitConversions.given
-import metrics.given
 
 object F {
   def _sum: Formula = {

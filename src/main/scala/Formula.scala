@@ -1,6 +1,5 @@
 package org.whsv26.reporter
 
-import MetricName.*
 import ImplicitConversions.given
 
 type Values = Boolean|String|Int|Float|OrderStatus

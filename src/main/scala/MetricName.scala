@@ -1,11 +1,11 @@
 package org.whsv26.reporter
 
-enum MetricName {
-  case OrdersQty
-  case OrdersInApprovedStatusQty
-  case OrdersInApprovedStatusPercent
-  case OrdersInSpamStatusQty
-  case OrdersInSpamStatusPercent
-  case OrdersInCanceledStatusQty
-  case OrdersInCanceledStatusPercent
-}
+sealed trait MetricName
+
+case object OrdersQty extends MetricName
+case object OrdersInApprovedStatusQty extends MetricName
+case object OrdersInApprovedStatusPercent extends MetricName
+case object OrdersInSpamStatusQty extends MetricName
+case object OrdersInSpamStatusPercent extends MetricName
+case object OrdersInCanceledStatusQty extends MetricName
+case object OrdersInCanceledStatusPercent extends MetricName
