@@ -1,7 +1,7 @@
 package org.whsv26.reporter
 package metrics
 
-import Aggregate.*
+import AggregateFunction.*
 import ImplicitConversions.given
 import scala.language.implicitConversions
 
