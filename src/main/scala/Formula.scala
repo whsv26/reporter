@@ -20,9 +20,9 @@ sealed trait Formula extends Arithmetic {
   def /(rhs: Formula): Formula = this./(this, rhs)
 }
 sealed trait Predicate extends Formula
-sealed trait AggregateFunction extends Formula
+sealed trait AggregateFunctions extends Formula
 
-object AggregateFunction {
+object AggregateFunctions {
   import Formulas.*
   def sum(fld: Field): Formula = Sum(fld)
   def count(fld: Field): Formula = Count(fld)
@@ -32,9 +32,19 @@ object AggregateFunction {
   def sumIf(fld: Field, p: Predicate): Formula = SumIf(fld, p)
 }
 
+object Functions {
+  import Formulas.*
+  def toStartOfYear(fld: Field): Formula = ToStartOfYear(fld)
+  def toStartOfMonth(fld: Field): Formula = ToStartOfMonth(fld)
+  def toStartOfWeek(fld: Field): Formula = ToStartOfWeek(fld)
+  def toStartOfDay(fld: Field): Formula = ToStartOfDay(fld)
+  def toStartOfHour(fld: Field): Formula = ToStartOfHour(fld)
+}
+
 object Formulas {
   export Arithmetics.*
   export AggregateFunctions.*
+  export Functions.*
   export Predicates.*
 
   object Arithmetics {
@@ -45,12 +55,20 @@ object Formulas {
   }
 
   object AggregateFunctions {
-    case class Sum(fld: Field) extends AggregateFunction
-    case class Count(fld: Field) extends AggregateFunction
-    case class CountIf(fld: Field, p: Predicate) extends AggregateFunction
-    case class CountDistinct(fld: Field) extends AggregateFunction
-    case class CountDistinctIf(fld: Field, p: Predicate) extends AggregateFunction
-    case class SumIf(fld: Field, p: Predicate) extends AggregateFunction
+    case class Sum(fld: Field) extends AggregateFunctions
+    case class Count(fld: Field) extends AggregateFunctions
+    case class CountIf(fld: Field, p: Predicate) extends AggregateFunctions
+    case class CountDistinct(fld: Field) extends AggregateFunctions
+    case class CountDistinctIf(fld: Field, p: Predicate) extends AggregateFunctions
+    case class SumIf(fld: Field, p: Predicate) extends AggregateFunctions
+  }
+
+  object Functions {
+    case class ToStartOfYear(fld: Field) extends AggregateFunctions
+    case class ToStartOfMonth(fld: Field) extends AggregateFunctions
+    case class ToStartOfWeek(fld: Field) extends AggregateFunctions
+    case class ToStartOfDay(fld: Field) extends AggregateFunctions
+    case class ToStartOfHour(fld: Field) extends AggregateFunctions
   }
 
   object Predicates {

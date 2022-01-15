@@ -2,6 +2,7 @@ package org.whsv26.reporter
 package datasource
 
 import fact.Metric
+import dimension.Grouping
 
 trait OrderSourceMetric[M <: Metric] extends ContextualMetric[M, OrderSource] {
   type ContextType = OrderField.type
@@ -9,9 +10,15 @@ trait OrderSourceMetric[M <: Metric] extends ContextualMetric[M, OrderSource] {
   final override def ctx: ContextType = OrderField
 }
 
+trait OrderSourceGrouping[G <: Grouping] extends ContextualGrouping[G, OrderSource] {
+  type ContextType = OrderField.type
+  final override def ctx: ContextType = OrderField
+}
+
 enum OrderField extends ContextualField {
   case OrderId
   case Status
+  case CreatedAt
 }
 
 class OrderSource extends DataSource {
@@ -19,7 +26,8 @@ class OrderSource extends DataSource {
     """
       |SELECT
       |    o.order_id,
-      |    o.status
+      |    o.status,
+      |    o.created_at
       |FROM orders o
       |""".stripMargin
 }

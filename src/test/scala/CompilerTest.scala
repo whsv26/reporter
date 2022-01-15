@@ -5,7 +5,7 @@ import org.scalatest.*
 import flatspec.*
 import matchers.*
 import datasource.*
-import AggregateFunction.*
+import AggregateFunctions.*
 
 import scala.language.implicitConversions
 import ImplicitConversions.given

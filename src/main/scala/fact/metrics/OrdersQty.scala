@@ -1,7 +1,7 @@
 package org.whsv26.reporter
 package fact.metrics
 
-import AggregateFunction.*
+import AggregateFunctions.*
 import datasource.*
 import fact.OrdersQty
 import ImplicitConversions.given
