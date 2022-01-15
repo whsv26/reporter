@@ -1,13 +1,13 @@
 package org.whsv26.reporter
 
-import AggregateFunctions.*
-import compiling.FormulaCompiler
-import datasource.*
-import fact.*
+import infrastructure.datasource.*
+import infrastructure.computation.*
+import infrastructure.compiling.*
+
 import org.scalatest.*
 import org.scalatest.flatspec.*
 import org.scalatest.matchers.*
-import scala.collection.mutable.Stack
+import scala.collection.mutable.Stack;
 
 class FormulaCompilerTest extends AnyFlatSpec with should.Matchers {
   behavior of ("Formula compiler")
@@ -32,18 +32,19 @@ class FormulaCompilerTest extends AnyFlatSpec with should.Matchers {
 
   object Cases {
     import scala.language.implicitConversions
-    import ImplicitConversions.given
+    import infrastructure.computation.ImplicitConversions.given
+    import infrastructure.computation.Formulas.*
 
     def _sum: Formula =
-      sum(OrderField.OrderId)
+      Sum(OrderField.OrderId)
 
     def _sumIf: Formula =
-      sumIf(OrderField.OrderId, OrderField.OrderId === 1)
+      SumIf(OrderField.OrderId, OrderField.OrderId === 1)
 
     def _sumIfWithOrderField: Formula =
-      sumIf(OrderField.OrderId, OrderField.OrderId === 1)
+      SumIf(OrderField.OrderId, OrderField.OrderId === 1)
 
     def _sumIfWithEventField: Formula =
-      sumIf(EventField.EventId, EventField.OrderId === 1)
+      SumIf(EventField.EventId, EventField.OrderId === 1)
   }
 }
