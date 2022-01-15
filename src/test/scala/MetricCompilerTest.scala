@@ -1,20 +1,19 @@
 package org.whsv26.reporter
 
 import AggregateFunctions.*
-import ImplicitConversions.given
 import compiling.FormulaCompiler
 import datasource.*
-import fact.OrdersInApprovedStatusPercent
+import dimension.*
+import fact.*
 import org.scalatest.*
 import org.scalatest.flatspec.*
 import org.scalatest.matchers.*
 import scala.collection.mutable.Stack
-import scala.language.implicitConversions
 
-class CompilerTest extends AnyFlatSpec with should.Matchers {
-  behavior of ("Compiler")
+class MetricCompilerTest extends AnyFlatSpec with should.Matchers {
+  behavior of ("Metric compiler")
 
-  it should "handle dependent metrics for different contexts" in {
+  it should "compile dependent metrics" in {
     compiling.Compiler.compile(OrdersInApprovedStatusPercent, OrderSource()) should be {
       "100 * countIf(`order_id`, `status` = 'APPROVED') / count(`order_id`)"
     }
