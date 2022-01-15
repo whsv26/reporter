@@ -1,9 +1,9 @@
 package org.whsv26.reporter
 
-import Ast.Predicate.*
-import Ast.Aggregate.*
-import Ast.Arithmetic.*
-import Ast.*
+import Formulas.Predicates.*
+import Formulas.AggregateFunctions.*
+import Formulas.Arithmetics.*
+import Formulas.*
 import metrics.given
 
 object Compiler {
@@ -44,7 +44,7 @@ object Compiler {
     case Minus(lhs, rhs) => "%s - %s" format(compile(lhs), compile(rhs))
     case Mul(lhs, rhs) => "%s * %s" format(compile(lhs), compile(rhs))
     case Div(lhs, rhs) => "%s / %s" format(compile(lhs), compile(rhs))
-    case Field(fld) => fld.toSnakeCase
+    case Field(fld) => "`%s`" format fld.toSnakeCase
     case Value(v) => v match {
       case status: OrderStatus => s"'${status.toString.toScreamingSnakeCase}'"
       case str: String => s"'$str'"
