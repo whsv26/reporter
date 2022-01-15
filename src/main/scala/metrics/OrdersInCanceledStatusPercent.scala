@@ -4,6 +4,9 @@ package metrics
 import AggregateFunction.*
 import ImplicitConversions.given
 import OrderStatus.*
+
+import org.whsv26.reporter.datasource.{EventSourceMetric, OrderSourceMetric}
+
 import scala.language.implicitConversions
 
 given OrderSourceMetric[OrdersInCanceledStatusPercent.type] with

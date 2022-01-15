@@ -6,15 +6,17 @@ import Formulas.Arithmetics.*
 import Formulas.*
 import metrics.given
 
+import org.whsv26.reporter.datasource.{ContextualMetric, DataSource, EventSource, OrderSource}
+
 object Compiler {
-  def formula[M <: MetricName, S <: DataSource](
+  def formula[M <: Metric, S <: DataSource](
     metric: M,
     source: S
   )(using
     cm: ContextualMetric[M, S]
   ): Formula = cm.formula
 
-  def compile(name: MetricName, source: DataSource): String = (name, source) match {
+  def compile(metric: Metric, source: DataSource): String = (metric, source) match {
     case (m: OrdersQty.type, s: OrderSource) => compile(formula(m, s))
     case (m: OrdersQty.type, s: EventSource) => compile(formula(m, s))
     case (m: OrdersInApprovedStatusQty.type, s: OrderSource) => compile(formula(m, s))
