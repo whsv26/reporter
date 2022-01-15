@@ -1,6 +1,8 @@
 package org.whsv26.reporter
 package datasource
 
+import fact.Metric
+
 trait EventSourceMetric[M <: Metric] extends ContextualMetric[M, EventSource] {
   type ContextType = EventField.type
   given EventSource = new EventSource

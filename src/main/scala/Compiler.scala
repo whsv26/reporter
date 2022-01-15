@@ -1,12 +1,12 @@
 package org.whsv26.reporter
 
-import Formulas.Predicates.*
+import Formulas.*
 import Formulas.AggregateFunctions.*
 import Formulas.Arithmetics.*
-import Formulas.*
-import metrics.given
-
-import org.whsv26.reporter.datasource.{ContextualMetric, DataSource, EventSource, OrderSource}
+import Formulas.Predicates.*
+import datasource.*
+import fact.*
+import fact.metrics.given
 
 object Compiler {
   def formula[M <: Metric, S <: DataSource](

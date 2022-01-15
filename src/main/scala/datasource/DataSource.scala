@@ -1,6 +1,8 @@
 package org.whsv26.reporter
 package datasource
 
+import fact.Metric
+
 trait ContextualField
 
 trait ContextualMetric[M <: Metric, S <: DataSource] {

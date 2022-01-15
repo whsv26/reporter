@@ -1,6 +1,8 @@
 package org.whsv26.reporter
 package datasource
 
+import fact.Metric
+
 trait OrderSourceMetric[M <: Metric] extends ContextualMetric[M, OrderSource] {
   type ContextType = OrderField.type
   given OrderSource = new OrderSource

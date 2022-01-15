@@ -1,4 +1,5 @@
 package org.whsv26.reporter
+package fact
 
 sealed trait Metric
 

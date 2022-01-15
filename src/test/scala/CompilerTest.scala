@@ -6,8 +6,11 @@ import flatspec.*
 import matchers.*
 import datasource.*
 import AggregateFunction.*
+
 import scala.language.implicitConversions
 import ImplicitConversions.given
+
+import org.whsv26.reporter.fact.OrdersInApprovedStatusPercent
 
 object F {
   def _sum: Formula = {

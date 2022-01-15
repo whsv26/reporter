@@ -1,12 +1,11 @@
 package org.whsv26.reporter
-package metrics
+package fact.metrics
 
 import AggregateFunction.*
-import ImplicitConversions.given
 import OrderStatus.*
-
-import org.whsv26.reporter.datasource.{EventSourceMetric, OrderSourceMetric}
-
+import datasource.*
+import fact.*
+import ImplicitConversions.given
 import scala.language.implicitConversions
 
 given OrderSourceMetric[OrdersInSpamStatusQty.type] with
