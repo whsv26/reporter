@@ -7,8 +7,8 @@ import infrastructure.computation.*
 import infrastructure.computation.Formulas.*
 import util.*
 
-object FormulaCompiler {
-  def compile(formula: Formula): String = formula match {
+object FormulaCompiler:
+  def compile(formula: Formula): String = formula match
     case Eq(fld, v) => "%s = %s" format(compile(fld), compile(v))
     case In(fld, v) => "%s IN %s" format(compile(fld), v.map(compile).mkString("(", ",", ")"))
     case Sum(fld) => "sum(%s)" format compile(fld)
@@ -27,10 +27,7 @@ object FormulaCompiler {
     case Mul(lhs, rhs) => "%s * %s" format(compile(lhs), compile(rhs))
     case Div(lhs, rhs) => "%s / %s" format(compile(lhs), compile(rhs))
     case Field(fld) => "`%s`" format fld.toSnakeCase
-    case Value(v) => v match {
+    case Value(v) => v match
       case status: OrderStatus => s"'${status.toString.toScreamingSnakeCase}'"
       case str: String => s"'$str'"
       case default => default.toString
-    }
-  }
-}

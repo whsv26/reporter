@@ -1,12 +1,14 @@
 package org.whsv26.reporter
 package util
 
-extension (s: String) {
-  def toSnakeCase = "[A-Z\\d]".r.replaceAllIn(s, { m =>
-    "_" + m.group(0).toLowerCase()
-  }).dropWhile(_ == '_')
+extension (str: String)
+  def toScreamingSnakeCase = str
+    .toSnakeCase
+    .toUpperCase
 
-  def toScreamingSnakeCase = s.toSnakeCase.toUpperCase
-}
+  def toSnakeCase = "[A-Z\\d]".r
+    .replaceAllIn(str, "_" + _.group(0).toLowerCase())
+    .dropWhile(_ == '_')
+
 
 

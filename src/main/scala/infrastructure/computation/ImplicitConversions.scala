@@ -5,7 +5,7 @@ import infrastructure.computation.Formulas.*
 import domain.{Metric, OrderStatus}
 import infrastructure.datasource.{ContextualField, ContextualMetric, DataSource}
 
-object ImplicitConversions {
+object ImplicitConversions:
   given Conversion[ContextualField, Field] = (cf: ContextualField) => Field(cf.toString)
 
   given Conversion[Boolean|String|Int|Float|OrderStatus, Value] = Value(_)
@@ -16,4 +16,3 @@ object ImplicitConversions {
   ): Conversion[M, Formula] with {
     override def apply(name: M): Formula = cm.formula
   }
-}

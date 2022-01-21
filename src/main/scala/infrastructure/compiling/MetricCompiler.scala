@@ -6,8 +6,8 @@ import infrastructure.computation.*
 import infrastructure.datasource.*
 import infrastructure.metrics.given
 
-object MetricCompiler {
-  def compile(metric: Metric, source: DataSource): String = (metric, source) match {
+object MetricCompiler:
+  def compile(metric: Metric, source: DataSource): String = (metric, source) match
     case (m: OrdersQty.type, s: OrderSource) => compile(formula(m, s))
     case (m: OrdersQty.type, s: EventSource) => compile(formula(m, s))
     case (m: OrdersInApprovedStatusQty.type, s: OrderSource) => compile(formula(m, s))
@@ -22,7 +22,6 @@ object MetricCompiler {
     case (m: OrdersInCanceledStatusQty.type, s: EventSource) => compile(formula(m, s))
     case (m: OrdersInCanceledStatusPercent.type, s: OrderSource) => compile(formula(m, s))
     case (m: OrdersInCanceledStatusPercent.type, s: EventSource) => compile(formula(m, s))
-  }
 
   private def formula[M <: Metric, S <: DataSource](
     metric: M,
@@ -31,5 +30,5 @@ object MetricCompiler {
     cm: ContextualMetric[M, S]
   ): Formula = cm.formula
 
-  private def compile(formula: Formula): String = FormulaCompiler.compile(formula)
-}
+  private def compile(formula: Formula): String =
+    FormulaCompiler.compile(formula)

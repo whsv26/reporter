@@ -5,10 +5,9 @@ import domain.*
 import infrastructure.*
 import infrastructure.datasource.DataSource
 
-object Compiler {
+object Compiler:
   def compile(metric: Metric, source: DataSource): String =
     MetricCompiler.compile(metric, source)
 
   def compile(grouping: Grouping, source: DataSource): String =
     GroupingCompiler.compile(grouping, source)
-}
